@@ -4,10 +4,11 @@ from pathlib import Path
 import os
 import joblib
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+model = joblib.load(BASE_DIR / "model.joblib")
+
 def ajax_data(request):
     data = request.POST.get('data','40,11.73,7.22')
-    BASE_DIR = Path(__file__).resolve().parent.parent
-    model = joblib.load(BASE_DIR / "model.joblib")
     
     # 파일 변환
     in_data = data
