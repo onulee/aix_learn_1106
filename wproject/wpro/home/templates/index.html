@@ -21,13 +21,39 @@
                 success:function(data){  // result_data,result
                     alert('예측 데이터를 가져옵니다. 성공');
                     console.log(data)
+                    // 예측무게 데이터
+                    const chart_data = Number(data.result_data);
                     $('#result').text(send_data);
                     $('#result2').text(data.result_data);
 
-                    //chart.js 이동
-                    
+                    //chart.js를 통해 그래프 생성
+                    const ctx = document.getElementById('myChart');
 
+                    let chartStatus = Chart.getChart("myChart");
+                    if(chartStatus != undefined){
+                        console.log("destroy success");
+                        chartStatus.destroy(); //리셋
+                    }
 
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                        labels: ['예측무게'],
+                        datasets: [{
+                            label: '예측무게',
+                            data: [chart_data],
+                            borderWidth: 1,
+                            barThickness: 50 // 막대두께 50px고정
+                        }]
+                        },
+                        options: {
+                        scales: {
+                            y: {
+                            beginAtZero: true
+                            }
+                        }
+                        }
+                    });
 
                 },
                 fail:function(){
@@ -60,27 +86,7 @@
     <!-- 그래프   -->
 
     <script>
-    const ctx = document.getElementById('myChart');
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-        labels: ['예측무게'],
-        datasets: [{
-            label: '예측무게',
-            data: [12],
-            borderWidth: 1,
-            barThickness: 50 // 막대두께 50px고정
-        }]
-        },
-        options: {
-        scales: {
-            y: {
-            beginAtZero: true
-            }
-        }
-        }
-    });
+    
     </script>
 
 </body>
