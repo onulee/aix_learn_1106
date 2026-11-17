@@ -49,6 +49,9 @@ def ajax_data(request):
 
     # np.array()타입을 list()타입으로 변경 - Json전송가능
     result_all = result_all.tolist()
+    # 모든 생선 종류 확인
+    print(model_ex[-1].classes_)
+    result_name = (model_ex[-1].classes_).tolist()
     #-------------------------------------    
 
     # 파일전달
@@ -56,7 +59,7 @@ def ajax_data(request):
         'result':f'{result[0]}',       # 분류예측생선
         'result2':result2,             # 해당생선확률
         'result_all':result_all,       # 전체생선확률 
-        'result_name':['Bream', 'Parkki', 'Perch', 'Pike', 'Roach', 'Smelt', 'Whitefish']  # 모든전체확률 
+        'result_name':result_name  # 모든전체확률 
     }
 
     print(f'예측 생선 : {result[0]} (예측확률 : {result2}) ')
