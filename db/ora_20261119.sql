@@ -16,3 +16,9 @@ create table stuscore (
 select * from stuscore;
 
 
+
+
+
+
+
+
