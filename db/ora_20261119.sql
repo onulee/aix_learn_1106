@@ -57,6 +57,64 @@ select round(12.34567,2) from dual;
 select kor,eng,math,kor+eng+math total,(kor+eng+math)/3 avg from stuscore;
 
 -- 평균을 소수점 2자리에서 반올림해서 출력하시오.
+-- round(값,자리수)
+select round((kor+eng+math)/3,2) from stuscore;
+-- 버림:floor
+select floor((kor+eng+math)/3) from stuscore;
+-- 올림:ceil
+select ceil((kor+eng+math)/3) from stuscore;
+
+-- trunc 버림(특정자리수 버림)
+select (kor+eng+math)/3,trunc((kor+eng+math)/3,3) from stuscore;
+
+
+-- 나머지
+select mod(3,2) from dual;
+
+select kor,round(kor,-1),trunc(kor,-1) from stuscore;
+
+
+-- 1915,1819,1719
+-- 1900,1800,1700 
+-- dual 사용
+select trunc(1915,-2) from dual;
+
+-- 사원번호 홀수인 사원을 출력하시오.
+-- 역순정렬로 출력하시오.
+
+select employee_id from employees
+where mod(employee_id,2)=1
+order by employee_id desc
+;
+
+-- stuscore 평균값이 80점 이상인 학생을 출력하시오.
+select kor,eng,math,(kor+eng+math) total,(kor+eng+math)/3 avg from stuscore
+where (kor+eng+math)/3 >=80
+order by (kor+eng+math)/3 desc
+;
+
+-- stuscore no 짝수인 학생을 출력하시오.
+select * from stuscore
+where mod(no,10)=0;
+
+select * from stuscore;
+
+select * from board;
+
+-- 시퀀스 : 번호가 자동으로 증가, 1씩 증가
+select board_seq.nextval from dual;
+
+select board_seq.currval from dual;
+
+
+
+
+
+
+
+
+
+
 
 
 
