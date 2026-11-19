@@ -173,10 +173,114 @@ create table board2 as select * from board;
 
 
 select * from board2;
-insert into board2 values(
+-- insert 입력컬럼을 선택을 안하려면, 모든 컬럼의 값을 입력해야 함.
+insert into board2 (bno,id,btitle,bcontent,bgroup,bfile) values(
 board2_seq.nextval,'aaa','게시글제목','게시글 내용입니다.',
-board2_seq.currval,0,0,0,sysdate,''
+board2_seq.currval,'1.jpg'
 );
+
+commit;
+
+-- 속성 : default 0
+desc board2;
+alter table board2 modify(bstep default 0);
+
+
+insert into board2(bno,id,btitle,bcontent,bgroup,bfile) values(
+board2_seq.nextval,'aaa','제목','내용',
+board2_seq.currval,'1.jpg'
+);
+select * from board2;
+
+-- bno primary key 등록
+alter table board2 add primary key (bno);
+desc board2;
+
+
+drop table board2;
+
+
+drop table stuscore2;
+
+drop table stuscore3;
+
+create table board2 (
+ bno number(4) primary key,
+ id varchar2(50) not null,
+ btitle varchar2(1000) not null,
+ bcontent clob not null,
+ bgroup number(4),
+ bstep number(4) default 0,
+ bindent number(4) default 0,
+ bhit number(4) default 0,
+ bdate date default sysdate,
+ bfile varchar2(100)
+ );
+ 
+ -- board,board2 테이블 구조가 같음.
+ -- board의 데이터를 board2로 복사
+ insert into board2 select * from board;
+ select * from board2;
+ 
+ commit;
+ 
+ select board2_seq.nextval from dual;
+
+
+-- 오라클 ( 숫자타입, 문자타입, 날짜타입 )
+-- number, varchar, char, clob, date
+
+delete board2;
+
+commit;
+
+
+select * from board2;
+
+
+insert into board2(bno,id,btitle,bcontent,bgroup,bdate) values (
+1,'aaa','제목','내용',1,sysdate
+);
+
+select * from stuscore;
+
+drop table member;
+
+create table member (
+id varchar2(50) primary key,
+pw varchar2(100) not null,
+name varchar2(30) not null,
+nickname varchar2(30),
+tel char(12),
+gender char(6) default '남자',
+hobby varchar2(50) default '게임',
+mdate date default sysdate
+);
+
+
+
+
+
+
+create table screen (
+sno number(5),
+rank number(5),
+title varchar2(100),
+sdate date,
+percent number(6,3),
+revenue number(12),
+crevenue number(12),
+sales number(10),
+csales number(10)
+);
+
+alter table screen rename column adate to sdate;
+
+desc screen;
+
+select * from screen;
+
+delete screen;
 
 commit;
 
@@ -184,6 +288,25 @@ commit;
 
 
 
+
+create table searchmovie (
+mno number(7),
+movieCd char(10),
+movieNm varchar(200),
+movieNmEn varchar(200),
+prdtYear number(4), -- varchar2, number 차이
+openDt varchar2(20),
+typeNm varchar2(20),
+prdtStatNm varchar2(20),
+nationAlt varchar2(20),
+genreAlt varchar2(200),
+repNationNm varchar2(50),
+repGenreNm varchar2(50),
+directors varchar2(1000),
+companys varchar2(1000)
+);
+
+select * from searchmovie;
 
 
 
