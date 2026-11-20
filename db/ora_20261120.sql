@@ -350,11 +350,84 @@ desc gallerylist;
 
 
 
+-- galphotographymonth : varchar타입 
+-- -> 날짜타입으로 변경하려니 데이터가 변경하려는타입과 형태가 다름.
+
+drop table gallerylist;
+
+create table gallerylist (
+    gno number(12) primary key,
+    galContentId varchar2(8) not null,
+    galContentTypeId varchar2(10),
+    galTitle varchar2(100),
+    galWebImageUrl varchar2(100),
+    galCreatedtime varchar2(100),
+    galModifiedtime varchar2(100),
+    galPhotographyMonth varchar2(10),
+    galPhotographyLocation varchar2(100),
+    galPhotographer varchar2(100),
+    galSearchKeyword varchar2(1000)  
+);
+
+select to_date(galPhotographyMonth,'yyyy-mm') from gallerylist;
+
+update gallerylist set 
+galPhotographyMonth = to_date(galPhotographyMonth,'yyyy-mm') ;
+
+commit;
+
+-- varchar2
+select galPhotographyMonth from gallerylist;
+
+alter table gallerylist
+add ( galPhotographyMonth2 date );
+-- galPhotographyMonth2:date타입
+update gallerylist
+set galPhotographyMonth2=galPhotographyMonth;
+
+alter table gallerylist
+drop column galphotographymonth;
+
+alter table gallerylist
+rename column galphotographymonth2 to galphotographymonth;
+
+desc gallerylist;
+
+select * from gallerylist;
+
+-- 날짜타입으로 변경하시오.
+select to_date(galcreatedtime,'yyyymmddhh24miss') from gallerylist;
+
+alter table gallerylist
+add ( galcreatedtime2 date );
+
+update gallerylist
+set galcreatedtime2 = to_date(galcreatedtime,'yyyymmddhh24miss');
+
+commit;
+
+alter table gallerylist
+drop column galcreatedtime;
+
+select * from gallerylist;
+
+desc gallerylist;
+
+alter table gallerylist modify GALMODIFIEDTIME invisible;
+alter table gallerylist modify GALPHOTOGRAPHYLOCATION invisible;
+alter table gallerylist modify GALPHOTOGRAPHER invisible;
+alter table gallerylist modify GALSEARCHKEYWORD invisible;
+
+alter table gallerylist modify GALMODIFIEDTIME visible;
+alter table gallerylist modify GALPHOTOGRAPHYLOCATION visible;
+alter table gallerylist modify GALPHOTOGRAPHER visible;
+alter table gallerylist modify GALSEARCHKEYWORD visible;
+
+desc gallerylist;
+
+alter table gallerylist
+rename column GALCREATEDTIME2 to GALCREATEDTIME;
 
 
-
-
-
-
-
+select '20261120',sysdate-to_date('20260101') from dual;
 
