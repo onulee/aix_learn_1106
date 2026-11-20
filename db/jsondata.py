@@ -6,7 +6,7 @@ print(df.head(2))
 
 
 # 파일저장
-df.to_csv('searchMovie.csv',encoding='utf-8-sig')
+df.to_csv('db/searchMovie.csv',encoding='utf-8-sig')
 print('완료')
 
 
