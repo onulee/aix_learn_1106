@@ -150,7 +150,212 @@ select * from board;
 select * from member;
 
 
+select bno,a.id,nickname,btitle,bcontent
+from board a,member b
+where a.id = b.id;
 
+
+select * from students;
+update students set grade=4 where name = 'Romonda';
+commit;
+select * from stuscore;
+
+alter table stuscore drop column grade;
+
+select * from stuscore;
+
+select a.name,grade,kor,eng,math
+from students a,stuscore b
+where a.name = b.name and lower(a.name) like '%a%';
+
+
+-- employees,departments
+-- 사원명,부서번호,부서명,입사일
+-- 부서번호가 50번 이상만 출력하시오.
+select emp_name,a.department_id,department_name,hire_date
+from employees a, departments b
+where a.department_id = b.department_id
+and a.department_id>=50
+order by a.department_id
+;
+
+select job_id from employees;
+select * from jobs;
+
+-- job_id가 MAN 인 사원의 job_id,job_title,salary,min_salary,hire_date
+-- job_id가 MAN 인 사원의,입사일이 02~03,05월 사원을 출력하시오.
+select a.job_id,job_title,salary,min_salary,hire_date
+from employees a,jobs b
+where a.job_id = b.job_id and a.job_id like '%MAN%'
+and
+substr(hire_date,4,2) in ('02','03','05')
+;
+
+select to_char(hire_date,'yyyy-mm-dd hh24:mi:ss') from employees;
+select to_char(hire_date,'mm') from employees
+where to_char(hire_date,'mm')>='02' and to_char(hire_date,'mm')<='05'
+;
+select substr(hire_date,4,2)  from employees
+where substr(hire_date,4,2) in ('02','03','05')
+;
+select * from jobs;
+
+-- 3개의 테이블을 가지고 equi-join
+select a.department_id,department_name,a.job_id,job_title
+from employees a, departments b, jobs c
+where a.department_id = b.department_id and
+a.job_id = c.job_id;
+
+
+-- equi join : 두테이블 간, 같은컬럼을 가지고 검색
+-- non-equi join : 두테이블 간, 같은 컬럼이 없이 검색
+create table sturank (
+srank varchar2(10),
+low_score number(3),
+high_score number(3)
+);
+
+-- VVIP,VIP,GOLD,SILVER,BRONZE
+insert into sturank values ('VVIP',91,100);
+insert into sturank values ('VIP',81,90);
+insert into sturank values ('GOLD',71,80);
+insert into sturank values ('SILVER',61,70);
+insert into sturank values ('BRONZE',0,60);
+commit;
+
+select * from sturank;
+select * from stuscore;
+
+-- non-equi join : 같은 컬럼이 없지만 2개의 테이블을 가지고 검색
+select srank
+from stuscore,sturank
+where (kor+eng+math)/3 between low_score and high_score
+order by no;
+
+select * from stuscore;
+alter table stuscore add rank varchar2(20);
+
+
+select * from sturank;
+-- update 하는 방법
+update stuscore a set rank = (
+select srank
+from sturank b
+where a.avg between b.low_score and b.high_score )
+;
+
+update stuscore a set rank = (
+select srank
+from sturank
+where a.avg between low_score and high_score )
+;
+
+select srank
+from sturank,stuscore
+where avg between low_score and high_score;
+
+
+select * from stuscore;
+
+alter table stuscore add avg number(5,2);
+
+update stuscore set avg = (kor+eng+math)/3;
+
+
+
+
+-- 
+select salary from employees
+order by salary desc;
+
+create table emprank (
+erank varchar2(20),
+low_salary number(20),
+high_salary number(20)
+);
+
+-- A,B,C,D,E등급
+insert into emprank values ('A',12000,30000);
+insert into emprank values ('B',10000,11999);
+insert into emprank values ('C',7000,9999);
+insert into emprank values ('D',4000,6999);
+insert into emprank values ('E',0,3999);
+-- 0-3999     E등급
+-- 4000-6999  D
+-- 7000-9999  C
+-- 10000-11999   B
+-- 12000 - 30000 A등급
+COMMIT;
+select * from emprank;
+
+-- non-equi조인
+select emp_name,salary,erank,low_salary,high_salary,hire_date
+from employees,emprank
+where salary between low_salary and high_salary;
+
+select emp_name,salary,erank,low_salary,high_salary,hire_date from employees,emprank\
+where salary between low_salary and high_salary;
+
+-- case when-then
+
+select salary,
+case
+when salary between 12000 and 30000 then 'A'
+when salary between 10000 and 11999 then 'B'
+when salary between 7000 and 9999 then 'C'
+when salary between 4000 and 6999 then 'D'
+else 'E'
+end as emprank
+from employees;
+
+--SELECT student_id,
+--       CASE 
+--         WHEN student_id BETWEEN 1 AND 10 THEN '1반'
+--         WHEN student_id BETWEEN 11 AND 20 THEN '2반'
+--         WHEN student_id BETWEEN 21 AND 30 THEN '3반'
+--         ELSE '기타'
+--       END AS class_name
+--FROM students;
+
+-- bfile 분리 filegroup 테이블 생성
+create table filegroup (
+bno number(4),
+bfile varchar2(100),
+constraint board_filegroup_fk_bno foreign key (bno)
+references board (bno) on delete cascade
+);
+
+select * from board;
+-- 컬럼삭제
+alter table board drop column bfile;
+
+insert into filegroup values(1,'1.jpg');
+insert into filegroup values(1,'2.jpg');
+insert into filegroup values(1,'3.jpg');
+insert into filegroup values(9,'1.jpg');
+
+commit;
+
+select * from filegroup;
+delete filegroup where bno=1;
+
+select a.bno,btitle,bfile from board a,filegroup b
+where a.bno = b.bno; 
+
+select * from board where bno=1;
+select * from filegroup where bno = 1;
+
+-- 
+
+
+
+
+
+
+select emp_name,a.department_id,department_name
+from employees a,departments b
+where a.department_id = b.department_id
+;
 
 
 
